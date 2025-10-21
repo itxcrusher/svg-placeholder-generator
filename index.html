@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Placeholder Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border-radius: 8px;
+            border: 2px solid #475569;
+        }
+        input[type="color"]::-moz-color-swatch {
+            border-radius: 8px;
+            border: 2px solid #475569;
+        }
+        #preview-container svg {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 flex flex-col items-center justify-center min-h-screen p-4 antialiased">
+
+    <div class="w-full max-w-4xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white">SVG Placeholder Generator</h1>
+            <p class="text-slate-400 mt-2">Create custom SVG placeholders instantly.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Controls Panel -->
+            <div class="bg-slate-800 rounded-xl shadow-2xl border border-slate-700 p-6 space-y-6">
+                <h2 class="text-xl font-semibold text-white border-b border-slate-700 pb-3">Options</h2>
+                
+                <!-- Dimensions -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="width" class="block text-sm font-medium text-slate-400 mb-1">Width</label>
+                        <input type="number" id="width" value="800" class="w-full bg-slate-700 text-white rounded-md p-2 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                    </div>
+                    <div>
+                        <label for="height" class="block text-sm font-medium text-slate-400 mb-1">Height</label>
+                        <input type="number" id="height" value="600" class="w-full bg-slate-700 text-white rounded-md p-2 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                    </div>
+                </div>
+
+                <!-- Colors -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-1">Background</label>
+                        <div class="flex items-center gap-2">
+                           <input type="color" id="bgColor" value="#334155">
+                           <input type="text" id="bgColorText" value="#334155" class="w-full bg-slate-700 text-white rounded-md p-2 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                        </div>
+                    </div>
+                     <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-1">Text Color</label>
+                        <div class="flex items-center gap-2">
+                           <input type="color" id="textColor" value="#cbd5e1">
+                           <input type="text" id="textColorText" value="#cbd5e1" class="w-full bg-slate-700 text-white rounded-md p-2 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Options -->
+                 <div>
+                    <label for="text" class="block text-sm font-medium text-slate-400 mb-1">Text</label>
+                    <input type="text" id="text" value="800 x 600" class="w-full bg-slate-700 text-white rounded-md p-2 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                </div>
+                 <div>
+                    <label for="fontSize" class="block text-sm font-medium text-slate-400 mb-1">Font Size</label>
+                    <input type="number" id="fontSize" value="48" class="w-full bg-slate-700 text-white rounded-md p-2 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                </div>
+
+            </div>
+
+            <!-- Preview & Actions Panel -->
+            <div class="space-y-6">
+                <div id="preview-container" class="w-full min-h-[200px] bg-slate-800 rounded-xl border-2 border-slate-700 p-4 flex items-center justify-center">
+                    <!-- SVG will be injected here -->
+                </div>
+                 <div class="relative">
+                    <label for="svg-code" class="block text-sm font-medium text-slate-400 mb-2">SVG Code</label>
+                    <textarea id="svg-code" readonly class="w-full h-24 bg-slate-800 border border-slate-700 text-slate-400 font-mono text-xs rounded-md p-3 pr-10 resize-none"></textarea>
+                    <button id="copy-code" class="absolute top-9 right-2 text-slate-400 hover:text-white transition-colors" title="Copy Code">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zM-1 7a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1H-.5A.5.5 0 0 1-1 7z"/></svg>
+                    </button>
+                    <span id="copy-feedback" class="absolute bottom-2 right-2 text-xs text-emerald-400"></span>
+                </div>
+                <button id="download-svg" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                    Download SVG
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const widthInput = document.getElementById('width');
+        const heightInput = document.getElementById('height');
+        const bgColorInput = document.getElementById('bgColor');
+        const textColorInput = document.getElementById('textColor');
+        const bgColorTextInput = document.getElementById('bgColorText');
+        const textColorTextInput = document.getElementById('textColorText');
+        const textInput = document.getElementById('text');
+        const fontSizeInput = document.getElementById('fontSize');
+        const previewContainer = document.getElementById('preview-container');
+        const svgCodeTextarea = document.getElementById('svg-code');
+        const copyCodeBtn = document.getElementById('copy-code');
+        const downloadSvgBtn = document.getElementById('download-svg');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        function generateSvg() {
+            const width = widthInput.value || 100;
+            const height = heightInput.value || 100;
+            const bgColor = bgColorInput.value;
+            const textColor = textColorInput.value;
+            const text = textInput.value;
+            const fontSize = fontSizeInput.value || 24;
+
+            const svgString = `
+<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="${bgColor}" />
+  <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="${fontSize}" fill="${textColor}" text-anchor="middle" dy=".3em">${text}</text>
+</svg>`.trim();
+
+            previewContainer.innerHTML = svgString;
+            svgCodeTextarea.value = svgString;
+        }
+
+        function updateInputs() {
+            if (this.id === 'width' || this.id === 'height') {
+                textInput.value = `${widthInput.value} x ${heightInput.value}`;
+            }
+            if (this.id === 'bgColor' || this.id === 'bgColorText') {
+                const color = this.value;
+                bgColorInput.value = color;
+                bgColorTextInput.value = color;
+            }
+            if (this.id === 'textColor' || this.id === 'textColorText') {
+                const color = this.value;
+                textColorInput.value = color;
+                textColorTextInput.value = color;
+            }
+            generateSvg();
+        }
+        
+        copyCodeBtn.addEventListener('click', () => {
+            svgCodeTextarea.select();
+            document.execCommand('copy');
+            copyFeedback.textContent = 'Copied!';
+            setTimeout(() => {
+                copyFeedback.textContent = '';
+            }, 2000);
+        });
+
+        downloadSvgBtn.addEventListener('click', () => {
+            const svgBlob = new Blob([svgCodeTextarea.value], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(svgBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `placeholder_${widthInput.value}x${heightInput.value}.svg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
+
+        // Add event listeners
+        [widthInput, heightInput, bgColorInput, textColorInput, bgColorTextInput, textColorTextInput, textInput, fontSizeInput].forEach(input => {
+            input.addEventListener('input', updateInputs);
+        });
+        
+        // Initial generation
+        generateSvg();
+    </script>
+</body>
+</html>
+
